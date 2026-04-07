@@ -1,0 +1,10 @@
+[package]
+name = "wispy-table"
+version = "0.1.0"
+edition = "2021"
+description = "The 32x32 Cayley table for algebraic type dispatch. 1KB. Lean-proved."
+license = "MIT"
+
+[features]
+default = ["std"]
+std = []
