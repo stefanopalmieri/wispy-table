@@ -6,7 +6,8 @@
    Elements:
      0=⊤  1=⊥  2=Q  3=E  4=CAR  5=CDR  6=CONS  7=RHO  8=APPLY  9=CC
      10=TAU  11=Y  12=T_PAIR  13=T_SYM  14=T_CLS  15=T_STR  16=T_VEC
-     17=T_CHAR  18=T_CONT  19=T_PORT  20=TRUE  21=EOF  22=VOID  23-31=reserved
+     17=T_CHAR  18=T_CONT  19=T_PORT  20=TRUE  21=EOF  22=VOID
+     23=T_RECORD  24=T_VALUES  25=T_ERROR  26=T_BYTEVEC  27=T_PROMISE  28-31=reserved
 -/
 
 import Mathlib.Data.Fintype.Basic
@@ -48,8 +49,8 @@ private def rawDot : Nat → Nat → Nat
   | 4, 8 => 0 | 4, 9 => 10 | 4, 10 => 0 | 4, 11 => 23
   | 4, 12 => 12 | 4, 13 => 1 | 4, 14 => 1 | 4, 15 => 1
   | 4, 16 => 1 | 4, 17 => 1 | 4, 18 => 1 | 4, 19 => 1
-  | 4, 20 => 1 | 4, 21 => 1 | 4, 22 => 1 | 4, 23 => 0
-  | 4, 24 => 0 | 4, 25 => 0 | 4, 26 => 0 | 4, 27 => 0
+  | 4, 20 => 1 | 4, 21 => 1 | 4, 22 => 1 | 4, 23 => 1
+  | 4, 24 => 1 | 4, 25 => 1 | 4, 26 => 1 | 4, 27 => 1
   | 4, 28 => 0 | 4, 29 => 0 | 4, 30 => 0 | 4, 31 => 0
   -- Row 5: CDR
   | 5, 0 => 1 | 5, 1 => 2 | 5, 2 => 2 | 5, 3 => 10
@@ -57,8 +58,8 @@ private def rawDot : Nat → Nat → Nat
   | 5, 8 => 10 | 5, 9 => 6 | 5, 10 => 0 | 5, 11 => 6
   | 5, 12 => 12 | 5, 13 => 1 | 5, 14 => 1 | 5, 15 => 1
   | 5, 16 => 1 | 5, 17 => 1 | 5, 18 => 1 | 5, 19 => 1
-  | 5, 20 => 1 | 5, 21 => 1 | 5, 22 => 1 | 5, 23 => 0
-  | 5, 24 => 0 | 5, 25 => 0 | 5, 26 => 0 | 5, 27 => 0
+  | 5, 20 => 1 | 5, 21 => 1 | 5, 22 => 1 | 5, 23 => 1
+  | 5, 24 => 1 | 5, 25 => 1 | 5, 26 => 1 | 5, 27 => 1
   | 5, 28 => 0 | 5, 29 => 0 | 5, 30 => 0 | 5, 31 => 1
   -- Row 6: CONS
   | 6, 0 => 0 | 6, 1 => 2 | 6, 2 => 4 | 6, 3 => 9
@@ -102,8 +103,8 @@ private def rawDot : Nat → Nat → Nat
   | 10, 8 => 1 | 10, 9 => 0 | 10, 10 => 0 | 10, 11 => 0
   | 10, 12 => 12 | 10, 13 => 13 | 10, 14 => 14 | 10, 15 => 15
   | 10, 16 => 16 | 10, 17 => 17 | 10, 18 => 18 | 10, 19 => 19
-  | 10, 20 => 20 | 10, 21 => 21 | 10, 22 => 22 | 10, 23 => 0
-  | 10, 24 => 1 | 10, 25 => 0 | 10, 26 => 0 | 10, 27 => 0
+  | 10, 20 => 20 | 10, 21 => 21 | 10, 22 => 22 | 10, 23 => 23
+  | 10, 24 => 24 | 10, 25 => 25 | 10, 26 => 26 | 10, 27 => 27
   | 10, 28 => 0 | 10, 29 => 0 | 10, 30 => 0 | 10, 31 => 0
   -- Row 11: Y
   | 11, 0 => 2 | 11, 1 => 2 | 11, 2 => 2 | 11, 3 => 3
@@ -136,12 +137,13 @@ private def rawDot : Nat → Nat → Nat
   | 21, 0 => 0 | 21, 1 => 1 | 21, _ => 21
   -- Row 22: VOID
   | 22, 0 => 0 | 22, 1 => 1 | 22, _ => 22
-  -- Rows 23-31: reserved (absorber-like, first col 0, rest = row index)
-  | 23, 0 => 0 | 23, _ => 23
-  | 24, 0 => 0 | 24, _ => 24
-  | 25, 0 => 0 | 25, _ => 25
-  | 26, 0 => 0 | 26, _ => 26
-  | 27, 0 => 0 | 27, _ => 27
+  -- Rows 23-27: R7RS type tags (absorb ⊤ and ⊥, identity elsewhere)
+  | 23, 0 => 0 | 23, 1 => 1 | 23, _ => 23
+  | 24, 0 => 0 | 24, 1 => 1 | 24, _ => 24
+  | 25, 0 => 0 | 25, 1 => 1 | 25, _ => 25
+  | 26, 0 => 0 | 26, 1 => 1 | 26, _ => 26
+  | 27, 0 => 0 | 27, 1 => 1 | 27, _ => 27
+  -- Rows 28-31: reserved
   | 28, 0 => 0 | 28, _ => 28
   | 29, 0 => 0 | 29, _ => 29
   | 30, 0 => 0 | 30, _ => 30
@@ -224,12 +226,16 @@ theorem car_pair : dot CAR 12 = 12 := by native_decide
 
 theorem car_non_pair_bot : dot CAR 13 = BOT ∧ dot CAR 14 = BOT ∧
     dot CAR 15 = BOT ∧ dot CAR 16 = BOT ∧ dot CAR 17 = BOT ∧
-    dot CAR 18 = BOT ∧ dot CAR 19 = BOT := by native_decide
+    dot CAR 18 = BOT ∧ dot CAR 19 = BOT ∧
+    dot CAR 23 = BOT ∧ dot CAR 24 = BOT ∧ dot CAR 25 = BOT ∧
+    dot CAR 26 = BOT ∧ dot CAR 27 = BOT := by native_decide
 
 -- 3l. Classifier on type tags
 theorem classifier_type_tags :
     dot TAU 12 = 12 ∧ dot TAU 13 = 13 ∧ dot TAU 14 = 14 ∧
     dot TAU 15 = 15 ∧ dot TAU 16 = 16 ∧ dot TAU 17 = 17 ∧
-    dot TAU 18 = 18 ∧ dot TAU 19 = 19 := by native_decide
+    dot TAU 18 = 18 ∧ dot TAU 19 = 19 ∧
+    dot TAU 23 = 23 ∧ dot TAU 24 = 24 ∧ dot TAU 25 = 25 ∧
+    dot TAU 26 = 26 ∧ dot TAU 27 = 27 := by native_decide
 
 end WispyScheme
